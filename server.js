@@ -3,14 +3,14 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-// Nou mete 8080 an premye kounye a:
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
 
-// Sèvi fichiye statik ki soti nan client/build
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+// Sèvi fichiye statik React yo
+const buildPath = path.join(__dirname, 'client', 'build');
+app.use(express.static(buildPath));
 
 // Route API pou fòm kontak la
 app.post('/api/contact', (req, res) => {
@@ -21,12 +21,15 @@ app.post('/api/contact', (req, res) => {
   res.json({ success: true, message: 'Message envoyé avec succès !' });
 });
 
-// Ranplase tout lòt wout yo pou kòmande index.html React la
+// Sèvi index.html pou nenpòt lòt wout
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.join(buildPath, 'index.html'), (err) => {
+    if (err) {
+      res.status(500).send("Build React la poko pare oswa fichiye a pa jwenn.");
+    }
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
 });
-                                 
