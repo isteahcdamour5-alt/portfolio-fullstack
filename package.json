@@ -4,8 +4,7 @@
   "description": "Portfolio Full-Stack LOG3500",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "cd client && npm install && npm run build"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
