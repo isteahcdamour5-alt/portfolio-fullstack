@@ -1,28 +1,29 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(cors());
 app.use(express.json());
 
-// API Endpoints
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Serveur Express fonctionnel' });
-});
+// Servir les fichiers statiques du build React
+app.use(express.static(path.join(__dirname, 'client/build')));
 
+// Route API pour le formulaire de contact
 app.post('/api/contact', (req, res) => {
   const { nom, email, message } = req.body;
   if (!nom || !email || !message) {
-    return res.status(400).json({ error: 'Champs requis manquants' });
+    return res.status(400).json({ success: false, error: 'Veuillez remplir tous les champs.' });
   }
-  res.json({ success: true, message: 'Message reçu avec succès' });
+  console.log('Nouveau message reçu:', { nom, email, message });
+  res.json({ success: true, message: 'Message envoyé avec succès !' });
 });
 
-// Servir les fichiers statiques du Client (React)
-app.use(express.static(path.join(__dirname, 'client/dist')));
-
+// Route par défaut pour React Router
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
 app.listen(PORT, () => {
