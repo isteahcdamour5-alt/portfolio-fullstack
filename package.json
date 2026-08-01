@@ -4,6 +4,7 @@
   "description": "Portfolio Full-Stack LOG3500",
   "main": "server.js",
   "scripts": {
+    "build": "cd client && npm install && npm run build",
     "start": "node server.js"
   },
   "dependencies": {
